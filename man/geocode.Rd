@@ -7,28 +7,23 @@
 geocode(batch, fields)
 }
 \arguments{
-\item{longitude}{Standard Longitude in range -/+180}
+\item{batch}{Data frame to be geocoded.}
 
-\item{latitude}{Standard latitude in range -/+90}
-
-\item{radius}{Radius in kilometers of the large circle to be covered by small cricles}
-
-\item{max_radius_km}{Radius in kilometers of the small cricles (e.g. 40km)}
+\item{fields}{Character vector of batch fields containing street address.}
 }
 \value{
-A data frame of the (longitude,latitude) pairs for the centres of the small circles which cover the large circle
+A data frame of the original batch data frame, with new geocoding fields added.
 }
 \description{
-geocode is a funtion that uses City of Milwaukee Public geocode API to geocode addresses.
-http://technistas.com/2012/06/11/using-rest-apis-from-r/
-http://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html
-http://stackoverflow.com/questions/10294284/remove-all-special-characters-from-a-string-in-r
-http://stackoverflow.com/questions/12193779/how-to-write-trycatch-in-r
-http://adv-r.had.co.nz/Exceptions-Debugging.html -- see Condition Handling
+geocode is a funtion that uses City of Milwaukee Public geocode API to
+geocode addresses. (Specifically, the \href{http://maps.milwaukee.gov/ArcGIS/rest/services/
+geocode/MAIthenDIME_geocode/GeocodeServer}{MAI-then-DIME} method.)
 }
 \examples{
-centre_table <- createCentroidTable(-122,37,400,40)
-plot(centre_table,pch=18)
+\dontrun{
+raw_geo <- geocode(head(raw), "LOCATION")
+raw_geo
+}
 
 }
 

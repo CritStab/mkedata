@@ -2,6 +2,7 @@
 
 export(createCentroidTable)
 export(geocode)
+export(get_mai)
 import(RCurl)
 import(jsonlite)
 import(stringr)

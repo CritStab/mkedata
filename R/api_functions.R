@@ -8,6 +8,7 @@
 #  o get_wibrs
 #
 # require(xlsx)
+# List of City of Milwaukee open data: http://city.milwaukee.gov/DownloadTabularData3496.htm#AddressIndex
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

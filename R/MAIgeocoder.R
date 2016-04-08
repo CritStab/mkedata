@@ -1,22 +1,71 @@
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
-# This document contains functions that geocodes addresses in Milwaukee, Wisconsin.
+# This document contains functions that geocode addresses in Milwaukee, Wisconsin.
 #
 # The primary functions include:
 #  o geocode
+#  o get_mai
 #
 # require("RCurl")
 # require("jsonlite")
 # require("stringr")
+# require("XML")
 # raw <- read.xlsx2("~/Dropbox/Analytics-Consulting/Non-client_projects/MKE data/crime/2014_WIBR_Radius99K_accessed091015.xls", 1) # accessed 9/10/15, 130 additinal records
 # devtools::use_data(raw)
 # data("raw") # 2014 raw data
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#' get_mai
+#'
+#' get_mai is a funtion that retreives the City of Milwaukee
+#' \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
+#' Address Index (MAI)}. This retrieves the XML verion, which is approximately
+#' 5.5MB, and may take awhile to download.
+#'
+#' @import jsonlite
+#'
+#' @param url Endpoint URL. Default = \url{http://itmdapps.milwaukee.gov/xmldata/Get_mai_xml}
+#' @return An object of (S3) class XMLDocument. This has two fields named doc
+#' and dtd and are of class DTDList and XMLDocumentContent respectively.
+#' @export
+#' @examples
+#' \dontrun{
+#' mai <- get_mai()
+#' head(mai)
+#' }
+#'
+get_mai <- function(url = mai_url){
+  retrieved <- Sys.Date()
+  mai_url <- "http://itmdapps.milwaukee.gov/xmldata/Get_mai_xml" # as of Apr 4 2016
+  message("This retrieves the XML verion, which is approximately 5.5MB and may
+          take awhile to download.")
+  message("Downloading . . . ")
+  message("Download complete . . . ")
+  message("Transforming XML to data frame . . . ")
+
+  # xmlTreeParse(mai_url)
+  xmlParse(mai_url)
+  }
+
+mai2 <- get_mai()
+root <- xmlRoot(mai2)
+xmlName(root)
+xmlSize(root)
+root[1:10][["TAXKEY"]]
+
+# class(mai)
+# xmltop <- xmlRoot(mai)
+# print(xmltop)[1:2]
+# maicat <- xmlSApply(xmltop, function(x) xmlSApply(x, xmlValue))
+# test <- unlist(maicat[1:2])
+# maicat_df <- data.frame(t(maicat),row.names=NULL)
+
+
 #' geocode
 #'
-#' geocode is a funtion that uses City of Milwaukee Public geocode API to geocode addresses.
-#' TODO: DESCRIBE METHOD AND NEW FIELDS ADDED
+#' geocode is a funtion that uses City of Milwaukee Public geocode API to
+#' geocode addresses. (Specifically, the \href{http://maps.milwaukee.gov/ArcGIS/rest/services/
+#' geocode/MAIthenDIME_geocode/GeocodeServer}{MAI-then-DIME} method.)
 #'
 #' @import RCurl jsonlite stringr
 #'
@@ -30,7 +79,6 @@
 #' raw_geo
 #' }
 #'
-
 geocode <- function(batch, fields){
   prefix <- "http://maps.milwaukee.gov/ArcGIS/rest/services/geocode/MAIthenDIME_geocode/GeocodeServer/findAddressCandidates?Street="
   suffix <-  "&SingleLine=&outFields=Loc_name&outSR=&f=json"
