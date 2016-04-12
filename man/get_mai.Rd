@@ -10,14 +10,14 @@ get_mai(url = mai_url)
 \item{url}{Endpoint URL. Default = \url{http://itmdapps.milwaukee.gov/xmldata/Get_mai_xml}}
 }
 \value{
-An object of (S3) class XMLDocument. This has two fields named doc
-and dtd and are of class DTDList and XMLDocumentContent respectively.
+A data frame.
 }
 \description{
 get_mai is a funtion that retreives the City of Milwaukee
 \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
 Address Index (MAI)}. This retrieves the XML verion, which is approximately
-5.5MB, and may take awhile to download.
+5.5MB, and may take awhile to download. Once download is complete, the file
+is transformed to a data frame (this may take a while).
 }
 \examples{
 \dontrun{

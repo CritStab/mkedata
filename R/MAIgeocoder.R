@@ -6,6 +6,7 @@
 #  o geocode_api
 #  o get_mai
 #  o match_mai
+#  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #
 # require("RCurl")
 # require("jsonlite")
@@ -127,3 +128,15 @@ geocode_api <- function(batch, fields){
           , "%)", sep="")
   batch
 }
+
+#' mai_04042016 dataset
+#'
+#' This contains the Master Address Index file downloaded and processed to a
+#' data frame on April 4, 2016.
+#'
+#' @examples
+#' data(mai_04042016)
+#' head(mai_04042016)
+#'
+#' @author Matthew Schumwinger
+"mai_04042016"
