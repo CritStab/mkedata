@@ -4,7 +4,8 @@
 \alias{get_wibrs}
 \title{get_wibrs}
 \usage{
-get_wibrs(url = wibrs_url, radius_ft = 99000, center = cityhall)
+get_wibrs(url = wibrs_url, radius_ft = 99000, center = cityhall,
+  data_range = yr2015)
 }
 \arguments{
 \item{url}{Target url.}
@@ -12,6 +13,9 @@ get_wibrs(url = wibrs_url, radius_ft = 99000, center = cityhall)
 \item{radius_ft}{Search radius (in feet). Default is 99000 to cover entire city.}
 
 \item{center}{Centroid address of radius. Default is address of City Hall.}
+
+\item{date_range}{Character vector of length 2. Default is c("01/01/2015",
+"12/31/2015").}
 }
 \value{
 A data frame.
@@ -21,8 +25,8 @@ get_wibrs retrieves WIBRS data from the City of Milwaukee's server.
 }
 \examples{
 \dontrun{
-raw_geo <- geocode(head(raw), "LOCATION")
-raw_geo
+city2015 <- get_wibrs()
+head(city2015)
 }
 }
 
