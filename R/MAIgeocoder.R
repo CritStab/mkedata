@@ -67,7 +67,7 @@ get_mai <- function(url = mai_url){
 #' @export
 #' @examples
 #' \dontrun{
-#' raw_geo <- geocode(head(raw), "LOCATION")
+#' raw_geo <- geocode_api(head(raw_wibrs_2005thru2015), "LOCATION")
 #' raw_geo
 #' }
 #'
@@ -128,3 +128,41 @@ geocode_api <- function(batch, fields){
           , "%)", sep="")
   batch
 }
+
+
+
+# match_mai <- (){
+#   sts <- as.data.frame(table(crime$LOCATION)) # table of unique address strings, for validation
+#
+#   #####################
+#   ## PREPROCESS DATA ##
+#   #####################
+#   # note: this is high volume and may be rejected by City API
+#   # send to geocoder API only those sts not matched by MAI
+#   # note any MAI score less than 95 could be suspect, especially on street direction error, DIME over 90 look good
+#   # records with score 100 about 21% ; records with score >= 95 about 29%
+#
+#   # merge MAI geo data to crime records where possible
+#   crime <- as.data.table(crime)
+#   mai <- as.data.table(mai)
+#   setkey(crime, LOCATION)
+#   setkey(mai, ADDRESS)
+#   mai.u <- unique(mai)
+#   crimeMAI <- mai.u[crime] # left outer join
+#   table(is.na(crimeMAI$WKT)) # compare to:
+#   table(crime$LOCATION %in% mai$ADDRESS) # direct match rate to MAI: ~ 78%
+#   crimeMAI <- crimeMAI[, c(1:3,18:28), with=F] # remove unessessry columns
+#
+#   # unique unmatched addresses
+#   setkey(crimeMAI, ADDRESS)
+#   u <- unique(crimeMAI) # unique addresses (should match sts)
+#   uu <- u[is.na(u$WKT), ] # and unmatched
+#
+#   # cull bad stuff known to fail geocoder
+#   uu <- uu[!grep("/", uu$ADDRESS), ] # intersections generally fail in City API
+#
+#   # split by district to feed chunks to geocoder
+#   d <- uu$DISTRICT
+#   uu.split <- split(as.data.frame(uu), d, drop=TRUE)
+#   #test <- lapply(uu.split, head, 2)
+# }

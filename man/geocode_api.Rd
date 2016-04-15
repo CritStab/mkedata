@@ -21,7 +21,7 @@ geocode/MAIthenDIME_geocode/GeocodeServer}{MAI-then-DIME} method.)
 }
 \examples{
 \dontrun{
-raw_geo <- geocode(head(raw), "LOCATION")
+raw_geo <- geocode_api(head(raw_wibrs_2005thru2015), "LOCATION")
 raw_geo
 }
 
