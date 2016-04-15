@@ -5,6 +5,7 @@
 # The primary functions include:
 #  o geocode_api
 #  o get_mai
+#  o geo_process_mai
 #  o match_mai
 #  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #
@@ -51,6 +52,39 @@ get_mai <- function(url = mai_url){
   root_df <- xmlToDataFrame(root, homogeneous = TRUE, stringsAsFactors = TRUE) # confirm new params work
   root_df
   }
+
+
+#' geo_process_mai
+#'
+#' geo_process_mai geoprocesses the City of Milwaukee
+#' \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
+#' Address Index (MAI)}. It does this by joining the MAI to the parcelbase file
+#' by TAXKEY field to associate x and y (lat/lon?) values with each MAI record.
+#'
+#' @import sp
+#'
+#' @param mai A dataframe of the raw Master Address Index.
+#' @param parcels A SpatialPolygonsDataFrame of parcelbase file.
+#' @return A data frame.
+#' @export
+#' @examples
+#' \dontrun{
+#' geo_mai <- geo_process_mai()
+#' head(geo_mai)
+#' }
+#'
+geo_process_mai <- function(mai = data(mai_04042016), parcels){
+
+  parcels <- get_parcels()
+  #
+
+}
+
+
+
+
+
+
 
 
 #' geocode_api
@@ -132,6 +166,7 @@ geocode_api <- function(batch, fields){
 
 
 # match_mai <- (){
+#
 #   sts <- as.data.frame(table(crime$LOCATION)) # table of unique address strings, for validation
 #
 #   #####################

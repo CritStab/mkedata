@@ -34,7 +34,7 @@ c14 <- read.xlsx2("2014_WIBR_Radius99K_accessed091015.xls", 1) # accessed 9/10/1
 c.list <- list(c05,c06,c07,c08,c09,c10,c11,c12,c13,c14) #remove meta lines at end; e.g. tail(c05, 10)
 trim <- function(x){
   x[1:(nrow(x)-3), ]
-} 
+}
 c.list <- lapply(c.list, trim)
 
 crime <- do.call("rbind", c.list) # combine years
@@ -49,19 +49,19 @@ sts <- as.data.frame(table(crime$LOCATION)) # table of unique address strings, f
 # records with score 100 about 21% ; records with score >= 95 about 29%
 
 # merge MAI geo data to crime records where possible
-crime <- as.data.table(crime) 
+crime <- as.data.table(crime)
 mai <- as.data.table(mai)
 setkey(crime, LOCATION)
 setkey(mai, ADDRESS)
 mai.u <- unique(mai)
 crimeMAI <- mai.u[crime] # left outer join
 table(is.na(crimeMAI$WKT)) # compare to:
-table(crime$LOCATION %in% mai$ADDRESS) # direct match rate to MAI: ~ 78% 
+table(crime$LOCATION %in% mai$ADDRESS) # direct match rate to MAI: ~ 78%
 crimeMAI <- crimeMAI[, c(1:3,18:28), with=F] # remove unessessry columns
 
 # unique unmatched addresses
 setkey(crimeMAI, ADDRESS)
-u <- unique(crimeMAI) # unique addresses (should match str)
+u <- unique(crimeMAI) # unique addresses (should match sts)
 uu <- u[is.na(u$WKT), ] # and unmatched
 
 # cull bad stuff known to fail geocoder
@@ -79,7 +79,7 @@ uu.split <- split(as.data.frame(uu), d, drop=TRUE)
 # use City MAI-then-DIME REST API to match remaining addresses
 ## ! NOTE: this takes 6 plus hours to run; use load() below to skip this step
 
-#geo.data <- tryCatch(lapply(uu.split, geocode, "ADDRESS")) 
+#geo.data <- tryCatch(lapply(uu.split, geocode, "ADDRESS"))
 #save(geo.data, file="crime-geocode-results.RData")
 load(file="crime-geocode-results.RData")
 
@@ -95,11 +95,11 @@ setkey(tt, ADDRESS)
 tt.s <- subset(tt, select = c(1,15:19)) # remove unessessry columns
 
 # left outer join to full crime dataset
-merged <- tt.s[crimeMAI] 
+merged <- tt.s[crimeMAI]
 
 # populate x and y with POINT_X and POINT_Y
 merged <- as.data.frame(merged)
-nrow(merged[is.na(merged$x), ]) 
+nrow(merged[is.na(merged$x), ])
 merged$x[is.na(merged$x)] <- merged$POINT_X[is.na(merged$x)]
 merged$y[is.na(merged$y)] <- merged$POINT_Y[is.na(merged$y)]
 nrow(merged[is.na(merged$x), ])
