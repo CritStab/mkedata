@@ -18,12 +18,13 @@ A data frame.
 geoprocess_mai geoprocesses the City of Milwaukee
 \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
 Address Index (MAI)}. It does this by joining the MAI to the parcelbase file
-by TAXKEY field to associate lat/lon values with each MAI record.
+by TAXKEY field to associate lat/lon values with each MAI record. It also
+adds a new "ADDRESS" field which is a concatination of existing fields.
 }
 \examples{
 \dontrun{
-data(mai_04042016)
-data(parcels)
+data("mai_04042016")
+data("parcels")
 geo_mai <- geoprocess_mai(mai_04042016, parcels)
 head(geo_mai)
 }

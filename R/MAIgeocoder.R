@@ -59,7 +59,8 @@ get_mai <- function(url = mai_url){
 #' geoprocess_mai geoprocesses the City of Milwaukee
 #' \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
 #' Address Index (MAI)}. It does this by joining the MAI to the parcelbase file
-#' by TAXKEY field to associate lat/lon values with each MAI record.
+#' by TAXKEY field to associate lat/lon values with each MAI record. It also
+#' adds a new "ADDRESS" field which is a concatination of existing fields.
 #'
 #' @importFrom sp CRS spTransform coordinates
 #'
@@ -69,8 +70,8 @@ get_mai <- function(url = mai_url){
 #' @export
 #' @examples
 #' \dontrun{
-#' data(mai_04042016)
-#' data(parcels)
+#' data("mai_04042016")
+#' data("parcels")
 #' geo_mai <- geoprocess_mai(mai_04042016, parcels)
 #' head(geo_mai)
 #' }
@@ -90,6 +91,11 @@ geoprocess_mai <- function(mai, parcels){
   parcels <- parcels[!is.na(parcels$TAXKEY), ] # remove rows with NA values
   parcels <- subset(parcels, select = c("TAXKEY", "lat", "lon"))
   mai <- merge(mai, parcels, by = "TAXKEY", all.x=T)
+
+  # create new address string field
+  mai$STREET <- trimws(mai$STREET, which = "right")
+  mai$ADDRESS <- paste(mai$HSE_NBR, mai$DIR, mai$STREET, mai$STTYPE)
+
   mai
 }
 
