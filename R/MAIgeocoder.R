@@ -5,7 +5,7 @@
 # The primary functions include:
 #  o geocode_api
 #  o get_mai
-#  o geo_process_mai
+#  o geoprocess_mai
 #  o match_mai
 #  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #
@@ -54,14 +54,14 @@ get_mai <- function(url = mai_url){
   }
 
 
-#' geo_process_mai
+#' geoprocess_mai
 #'
-#' geo_process_mai geoprocesses the City of Milwaukee
+#' geoprocess_mai geoprocesses the City of Milwaukee
 #' \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
 #' Address Index (MAI)}. It does this by joining the MAI to the parcelbase file
-#' by TAXKEY field to associate x and y (lat/lon?) values with each MAI record.
+#' by TAXKEY field to associate lat/lon values with each MAI record.
 #'
-#' @import sp
+#' @importFrom sp CRS spTransform coordinates
 #'
 #' @param mai A dataframe of the raw Master Address Index.
 #' @param parcels A SpatialPolygonsDataFrame of parcelbase file.
@@ -69,22 +69,29 @@ get_mai <- function(url = mai_url){
 #' @export
 #' @examples
 #' \dontrun{
-#' geo_mai <- geo_process_mai()
+#' data(mai_04042016)
+#' data(parcels)
+#' geo_mai <- geoprocess_mai(mai_04042016, parcels)
 #' head(geo_mai)
 #' }
 #'
-geo_process_mai <- function(mai = data(mai_04042016), parcels){
+geoprocess_mai <- function(mai, parcels){
 
-  parcels <- get_parcels()
-  #
+  # convert parcels to lat/lon coordinates (this may take a few minutes)
+  WGS84 <- sp::CRS("+proj=longlat +datum=WGS84")
+  parcels <- sp::spTransform(parcels, WGS84)
 
+  # promote centroid of each parcel
+  parcels@data$lat <- sp::coordinates(parcels)[ , 2]
+  parcels@data$lon <- sp::coordinates(parcels)[ , 1]
+
+  # join lat/lon to MAI
+  parcels <- parcels@data
+  parcels <- parcels[!is.na(parcels$TAXKEY), ] # remove rows with NA values
+  parcels <- subset(parcels, select = c("TAXKEY", "lat", "lon"))
+  mai <- merge(mai, parcels, by = "TAXKEY", all.x=T)
+  mai
 }
-
-
-
-
-
-
 
 
 #' geocode_api
