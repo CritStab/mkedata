@@ -46,3 +46,18 @@
 #'
 #' @author Matthew Schumwinger
 "raw_wibrs_2005thru2015"
+
+#' crime.geo dataset
+#'
+#' This contains all WIBRS crime incident records for the entire City of
+#' Milwukee, from Jan 1, 2005 through Dec 31 2015. Records were downloaded from
+#' the COMPASS website. 2015 data were retreived on 04/13/2016. Data was then
+#' geocoded with full_geocode(). X/Y coordinates are in the NAD27 datum. Raw
+#' WIBRS data is in raw_wibrs_2005thru2015 dataset.
+#'
+#' @examples
+#' data(crime.geo)
+#' head(crime.geo)
+#'
+#' @author Matthew Schumwinger
+"crime.geo"

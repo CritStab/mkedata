@@ -17,6 +17,7 @@ data("geo_mai")
 
 # merge MAI geo data to crime records where possible
 crime <- data.table::as.data.table(raw_wibrs_2005thru2015)
+crime$INCIDENT_N <- as.character(crime$INCIDENT_N ) # these are mostly unique
 mai <- data.table::as.data.table(geo_mai)
 data.table::setkey(crime, LOCATION)
 data.table::setkey(mai, ADDRESS)
@@ -54,12 +55,15 @@ uu <- uu[!grep("/", uu$ADDRESS), ] # intersections generally fail in City API
 #####################
 ## GEOCODE DATA    ##
 #####################
+begin <- Sys.time()
 message("Use City MAI-then-DIME REST API to match remaining addresses")
-message("NOTE: this will take approximately ", round(nrow(uu)/100/60), " hours to complete
-        (roughly 1 minute per 100 records).")
-test <- uu[1200:1220, ]
-geo.data <- tryCatch(geocode_api(test, "ADDRESS"))
+message("NOTE: this will take approximately ", round(nrow(uu)/120/60), " hours to complete
+        (roughly 1 minute per 120 records).")
+# test <- uu[1200:1220, ]
+geo.data <- tryCatch(geocode_api(uu, "ADDRESS"))
 # geo.data <- tryCatch(lapply(uu.split, geocode, "ADDRESS")) # original call if spliting into lists
+end <- Sys.time()
+message("time elapsed for API calls: ", round(end-begin, 2), " hours")
 
 ######################
 ## POSTPROCESS DATA ##
@@ -69,28 +73,65 @@ tt <- geo.data
 tt$x <- as.numeric(tt$x)
 tt$y <- as.numeric(tt$y)
 tt$locator <- as.character(tt$locator)
-tt <- subset(tt, select = c("x",
-                              "y",
-                              "ADDRESS",
-                              "INCIDENT_N",
-                              "geoAdd",
-                              "locator",
-                              "score")) # remove unessessry columns
+tt <- subset(tt, select = c("ADDRESS", # remove unessessry columns
+                            "x",
+                            "y",
+                            "geoAdd",
+                            "locator",
+                            "score"))
 tt <- data.table::as.data.table(tt)
 data.table::setkey(tt, ADDRESS)
 
 # left outer join to full crime dataset
 merged <- tt[crimeMAI]
 
-# populate x and y with POINT_X and POINT_Y
-# TODO: check this
+# consolidate data, columns
 merged <- as.data.frame(merged)
 nrow(merged[is.na(merged$x), ])
 merged$x[is.na(merged$x)] <- merged$i.x[is.na(merged$x)]
 merged$y[is.na(merged$y)] <- merged$i.y[is.na(merged$y)]
 nrow(merged[is.na(merged$x), ])
-crime.geo <- merged
-# TODO: add diagnostics
-paste0("New match rate to the MAI: ",
-       round(table(!is.na(crime.geo$x))[2] / nrow(crime), 4)*100, "%")
+merged$i.x <- NULL
+merged$i.y <- NULL
 
+# standardize score, locator
+merged[!is.na(merged$x) & is.na(merged$geoAdd), "score"] <- "100"
+merged[!is.na(merged$x) & is.na(merged$geoAdd), "locator"] <- "direct match"
+merged[grep("/", merged$ADDRESS), "locator"] <- "BA-intersection"
+merged[merged$ADDRESS == "", "locator"] <- "BA-redacted"
+merged$locator <- as.factor(merged$locator)
+
+crime.geo <- merged
+
+######################
+## DIAGNOSTICS      ##
+######################
+
+# TODO: make score numeric calculate % "good" scores
+dplyr::summarise(dplyr::group_by(crime.geo, locator),
+                 records = length(locator),
+                 percent = round(length(locator)/nrow(crime.geo)*100, 2))
+
+paste0("Percent records with no or unusable locations: ",
+       round(nrow(crime.geo[grep("BA", crime.geo$locator), ]) / nrow(crime), 4)*100, "%")
+paste0("Geocoding match rate ",
+       round(
+         # geocode matches
+         nrow(subset(crime.geo, locator == "direct match" |
+                       locator == "MAI_geocode" |
+                       locator == "DIME_geocode")) /
+         # total, less BAs
+           (nrow(crime) -  nrow(crime.geo[grep("BA", crime.geo$locator), ])),
+         6)*100, "%")
+paste0("Geocoding match rate with perfect (100) scores: ",
+       round(nrow(subset(crime.geo, score == "100")) /
+           # total, less BAs
+         (nrow(crime) -  nrow(crime.geo[grep("BA", crime.geo$locator), ])),
+         6)*100, "%")
+paste0("Percent of orginial dataset geocoded: ",
+       round(
+         # geocode matches
+         nrow(subset(crime.geo, locator == "direct match" |
+                       locator == "MAI_geocode" |
+                       locator == "DIME_geocode")) /
+           nrow(crime), 6)*100, "%")
