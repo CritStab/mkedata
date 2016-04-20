@@ -4,10 +4,10 @@
 \alias{full_geocode}
 \title{full_geocode}
 \usage{
-full_geocode(dataframe, field, MAI)
+full_geocode(df, field, MAI)
 }
 \arguments{
-\item{dataframe}{A dataframe with City of Milwaukee records to geocode.}
+\item{df}{A dataframe with City of Milwaukee records to geocode.}
 
 \item{field}{(NOT IMPLEMENTED)Character string of single column name containing street address
 information to geocode. (Note: you may need to concatenate prior to using
@@ -20,15 +20,16 @@ geoprocessed against parcel centroids.}
 A data frame.
 }
 \description{
-full_geocode is a function that geocode addresses in Milwaukee,
+full_geocode is a function that geocodes addresses in Milwaukee,
 Wisconsin. Draft version geocodes crime data, first by matching against
-geoprocessed MAI, thne using low_level funciton to access City geocode API.
+geoprocessed MAI, then using low_level funciton to access City geocode API.
 }
 \examples{
 \dontrun{
 data("raw_wibrs_2005thru2015")
+crime_subset <- raw_wibrs_2005thru2015[sample(nrow(raw_wibrs_2005thru2015), 30), ]
 data("geo_mai")
-geo_crime <- full_geocode(raw_wibrs_2005thru2015, "LOCATION", geo_mai)
+geo_crime <- full_geocode(crime_subset, "LOCATION", geo_mai)
 head(geo_crime)
 }
 

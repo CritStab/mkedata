@@ -14,20 +14,19 @@
 #  o generalize to any type of records; use field param
 #  o include instuctions on preparing `field` param to geocode on
 #  o improve exampke, use more wieldy data, plot
-#  o
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #' full_geocode
 #'
-#' full_geocode is a function that geocode addresses in Milwaukee,
+#' full_geocode is a function that geocodes addresses in Milwaukee,
 #' Wisconsin. Draft version geocodes crime data, first by matching against
-#' geoprocessed MAI, thne using low_level funciton to access City geocode API.
+#' geoprocessed MAI, then using low_level funciton to access City geocode API.
 #'
 #' @importFrom dplyr summarise
 #' @import data.table
 #'
-#' @param dataframe A dataframe with City of Milwaukee records to geocode.
+#' @param df A dataframe with City of Milwaukee records to geocode.
 #' @param field (NOT IMPLEMENTED)Character string of single column name containing street address
 #' information to geocode. (Note: you may need to concatenate prior to using
 #' this function).
@@ -38,25 +37,26 @@
 #' @examples
 #' \dontrun{
 #' data("raw_wibrs_2005thru2015")
+#' crime_subset <- raw_wibrs_2005thru2015[sample(nrow(raw_wibrs_2005thru2015), 30), ]
 #' data("geo_mai")
-#' geo_crime <- full_geocode(raw_wibrs_2005thru2015, "LOCATION", geo_mai)
+#' geo_crime <- full_geocode(crime_subset, "LOCATION", geo_mai)
 #' head(geo_crime)
 #' }
 #'
-full_geocode <- function(dataframe, field, MAI){
+full_geocode <- function(df, field, MAI){
 
   # TODO: generalize these out
-  raw_wibrs_2005thru2015 <- dataframe
-  geo_mai <- MAI
+  # raw_wibrs_2005thru2015 <- dataframe
+  # geo_mai <- MAI
 
   #####################
   ## MATCH TO MAI    ##
   #####################
 
   # merge MAI geo data to crime records where possible
-  crime <- data.table::as.data.table(raw_wibrs_2005thru2015)
+  crime <- data.table::as.data.table(df)
   crime$INCIDENT_N <- as.character(crime$INCIDENT_N ) # these are mostly unique
-  mai <- data.table::as.data.table(geo_mai)
+  mai <- data.table::as.data.table(MAI)
   data.table::setkey(crime, LOCATION)
   data.table::setkey(mai, ADDRESS)
   mai.u <- unique(mai)
@@ -71,14 +71,13 @@ full_geocode <- function(dataframe, field, MAI){
          round(table(!is.na(crimeMAI$x))[2] / nrow(crime), 4)*100, "%")
   crimeMAI <- crimeMAI[, c(16:27), with = FALSE] # remove unessessry columns #TODO generalize
 
-
   ################################
   ## PREPARE FOR API GEOCODER   ##
   ################################
 
   # unique unmatched addresses
   data.table::setkey(crimeMAI, ADDRESS)
-  u <- data.table::unique(crimeMAI) # unique addresses
+  u <- unique(crimeMAI) # unique addresses
   uu <- u[is.na(u$x), ] # and unmatched
 
   # cull bad stuff known to fail geocoder
@@ -93,6 +92,7 @@ full_geocode <- function(dataframe, field, MAI){
   #####################
   ## GEOCODE DATA    ##
   #####################
+
   begin <- Sys.time()
   message("Use City MAI-then-DIME REST API to match remaining addresses")
   message("NOTE: this will take approximately ", round(nrow(uu)/120/60), " hours to complete
