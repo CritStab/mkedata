@@ -14,7 +14,7 @@ SpatialPolygonsDataFrame on April 15, 2016.
 }
 \examples{
 data(parcels)
-head(parcels@data)
+sp::plot(tail(parcels, 30))
 
 }
 \author{

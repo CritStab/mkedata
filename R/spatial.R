@@ -8,7 +8,11 @@
 #  o get_mprop (TODO)
 #  o get_bids (TODO)
 #
-# see  http://city.milwaukee.gov/ImageLibrary/Public/GIS/MapMilwaukee_GISServices.pdf
+# http://city.milwaukee.gov/ImageLibrary/Public/GIS/MapMilwaukee_GISServices.pdf
+#
+# __Geographic boundaries__ -- Business Improvement District (BID) and neighborhood
+# boundaries were acquired from the City of Milwaukee [GIS Services REST API]
+# (http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer).
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 

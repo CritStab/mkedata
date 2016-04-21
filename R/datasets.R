@@ -20,18 +20,6 @@
 #' @author Matthew Schumwinger
 "mai_04042016"
 
-#' parcels dataset
-#'
-#' This contains the parcelbase shapefile downloaded and processed to a
-#' SpatialPolygonsDataFrame on April 15, 2016.
-#'
-#' @examples
-#' data(parcels)
-#' head(parcels@data)
-#'
-#' @author Matthew Schumwinger
-"parcels"
-
 
 
 #' raw_wibrs_2005thru2015 dataset
@@ -61,3 +49,71 @@
 #'
 #' @author Matthew Schumwinger
 "crime.geo"
+
+#--------------
+# Spatial Shapes
+#--------------
+
+#' parcels dataset
+#'
+#' This contains the parcelbase shapefile downloaded and processed to a
+#' SpatialPolygonsDataFrame on April 15, 2016.
+#'
+#' @examples
+#' data(parcels)
+#' sp::plot(tail(parcels, 30))
+#'
+#' @author Matthew Schumwinger
+"parcels"
+
+#' bids dataset
+#'
+#' This contains the Milwaukee Business Improvement Distict (BID) shapefile
+#' downloaded on Feb 26, 2015 and processed to a SpatialPolygonsDataFrame.
+#' Projected using WGS84.
+#'
+#' @examples
+#' data(bids)
+#' sp::plot(bids)
+#'
+#' @author Matthew Schumwinger
+"bids"
+
+#' hoods dataset
+#'
+#' This contains the City of Milwaukee neighborhood boundary shapefile
+#' downloaded on Feb 26, 2015 and processed to a SpatialPolygonsDataFrame.
+#' Projected using State Plane South NAD 27 (ESPG 32054).
+#'
+#' @examples
+#' data(hoods)
+#' sp::plot(hoods)
+#'
+#' @author Matthew Schumwinger
+"hoods"
+
+#' mkeoutline dataset
+#'
+#' This contains the corporate boundary of the City of Milwaukee shapefile
+#' downloaded on Feb 26, 2015 and processed to a SpatialPolygonsDataFrame.
+#' Projected using WGS84.
+#'
+#' @examples
+#' data(mkeoutline)
+#' sp::plot(mkeoutline)
+#'
+#' @author Matthew Schumwinger
+"mkeoutline"
+
+#' mainroads dataset
+#'
+#' This contains the Open StreetMap main roads for metro Milwaukee shapefile
+#' downloaded on Dec 3, 2012 and processed to a SpatialPolygonsDataFrame.
+#' Mercator propjection.
+#'
+#' @examples
+#' data(mainroads)
+#' sp::plot(mainroads)
+#'
+#' @author Matthew Schumwinger
+"mainroads"
