@@ -7,7 +7,8 @@
 #  o get_parcelbase
 #  o get_mprop (TODO)
 #  o get_bids
-
+#
+# see  http://city.milwaukee.gov/ImageLibrary/Public/GIS/MapMilwaukee_GISServices.pdf
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
