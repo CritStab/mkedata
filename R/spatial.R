@@ -63,3 +63,55 @@ get_parcels <- function(url = parcel_url){
   message("Removing `/temp_downloads` directory . . .")
   spdf
 }
+
+
+
+#' get_bids
+#'
+#' get_bids is a function that retreives the City of Milwaukee's Business
+#' Improvement District (BID) shapefile
+#' \href{http://city.milwaukee.gov/DownloadMapData3497.htm}{from the
+#' city's download map data page}.
+#'
+#' @importFrom rgdal readOGR
+#'
+#' @param url Endpoint URL. Default = \url{http://itmdapps.milwaukee.gov/gis/mapdata/parcelbase.zip}
+#' @return A large SpatialPolygonsDataFrame.
+#' @export
+#' @examples
+#' \dontrun{
+#' bids <- get_bids()
+#' head(bids@data)
+#' }
+#'
+get_bids <- function(url = parcel_url){
+  library(rgdal)
+  library(jsonlite)
+  library(httr)
+  library(rvest)
+  # consider using  http://www.mapquestapi.com/geocoding/
+
+  # use City REST interface to get KMZ files of shapes
+
+
+  # create session; get and populate login form
+  start <- "http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query"
+  pgsession <-html_session(start)
+  pgform    <-html_form(pgsession)
+
+  names(pgform) <- "foo"
+  # names(pgform$foo$fields)[10] <- "GET"
+  # pgform$foo$fields$GET$name <- "GET"
+  pgform$foo$fields$text$value <- "%"
+  pgform$foo$fields$returnCountOnly$value <- "false"
+  pgform$foo$fields$returnIdsOnly$value <- "false"
+  pgform$foo$fields$f$value <- "kmz"
+
+  # returns the zipped (binary) KMZ file
+  t <- submit_form(pgsession, pgform$foo)
+  parsed_t <- readBin(t$response$content, what = "character")
+  zz <- file("/Users/matthewschumwinger/Desktop/testbin.zip", "wb")
+  writeBin(t$response$content, zz)
+  close(zz)
+
+}
