@@ -13,7 +13,8 @@
 # TODO:
 #  o generalize to any type of records; use field param
 #  o include instuctions on preparing `field` param to geocode on
-#  o improve exampke, use more wieldy data, plot
+#  o improve exampe, use more wieldy data, plot
+#  o consider using  http://www.mapquestapi.com/geocoding/
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
