@@ -6,6 +6,7 @@
 # The primary functions include:
 #  o get_wibrs (DEBUG)
 #  o append_wibrs
+#  o munge_wibrs
 
 #
 # require(xlsx)
@@ -108,4 +109,130 @@ get_wibrs <- function(url = wibrs_url, radius_ft = 99000, center = cityhall, dat
     jump_to(radius) %>%
     html_nodes("title") %>%
     submit_form(filled_form_radius)
+}
+
+
+#' munge_wibrs
+#'
+#' munge_wibrs munges geo-processed WIBRS data, producing a
+#' SpatialPointsDataFrame ready for analysis and visualization. Note: this
+#' function does not exclude records with low or null geocode scores.
+#'
+#' @importFrom lubridate parse_date_time
+#' @importFrom sp CRS coordinates proj4string plot
+#' @param df A data frame of WIBRS data.
+#' @return A SpatialPointsDataFrame in CRS NAD27.
+#' @export
+#' @examples
+#' data(crime.geo)
+#' crimes <- munge_wibrs(crime.geo)
+
+munge_wibrs <- function(df) {
+
+  ## TODO: convert to spacetime class; add parameter to prune by geo score
+
+  # new variable: map MPD RMS class to WIBRS OFFENSE1 type, per Nancy Olson email
+  crime.geo$group <- "other"
+  crime.geo$group[crime.geo$OFFENSE1 == "AGGRAVATED ASSAULT"
+                  | crime.geo$OFFENSE1 == "SIMPLE ASSAULT"
+                  | crime.geo$OFFENSE1 == "INTIMIDATION"] <- "Assault"
+  crime.geo$group[crime.geo$OFFENSE1 == "ARSON"] <- "Arson"
+  crime.geo$group[crime.geo$OFFENSE1 == "DESTRUCTION/DAMAGE/VANDALISM OF PROPERTY"] <-
+    "Criminal damage"
+  crime.geo$group[crime.geo$OFFENSE1 == "BURGLARY/BREAKING AND ENTERING"] <-
+    "Burglary"
+  crime.geo$group[crime.geo$OFFENSE1 == "HOMICIDE"] <- "Homicide"
+  crime.geo$group[crime.geo$OFFENSE1 == "THEFT FROM MOTOR VEHICLE"] <-
+    "Locked vehicle"
+  crime.geo$group[crime.geo$OFFENSE1 == "ROBBERY"] <- "Robbery"
+  crime.geo$group[crime.geo$OFFENSE1 == "FORCIBLE RAPE"
+                  | crime.geo$OFFENSE1 == "FORCIBLE SODOMY"
+                  |
+                    crime.geo$OFFENSE1 == "SEXUAL ASSAULT WITH AN OBJECT"
+                  | crime.geo$OFFENSE1 == "FORCIBLE FONDLING"
+                  | crime.geo$OFFENSE1 == "INCEST"
+                  |
+                    crime.geo$OFFENSE1 == "STATUTORY RAPE"] <- "Sex offenses"
+  crime.geo$group[crime.geo$OFFENSE1 == "POCKET PICKING"
+                  | crime.geo$OFFENSE1 == "PURSE SNATCHING"
+                  | crime.geo$OFFENSE1 == "SHOPLIFTING"
+                  | crime.geo$OFFENSE1 == "THEFT FROM BUILDING"
+                  |
+                    crime.geo$OFFENSE1 == "THEFT FROM COIN-OPPERATED MACHINES"
+                  |
+                    crime.geo$OFFENSE1 == "THEFT OF MOTOR VEHICLE PARTS/ACCESSORIES"
+                  | crime.geo$OFFENSE1 == "ALL OTHER LARCENY"] <-
+    "Theft"
+  crime.geo$group[crime.geo$OFFENSE1 == "MOTOR VEHICLE THEFT"] <-
+    "Vehicle theft"
+  crime.geo$group <- as.factor(crime.geo$group)
+
+  # psuedo categories
+  theft_types <- c(
+    "PURSE SNATCHING",
+    "SHOPLIFTING",
+    "POCKET PICKING",
+    "THEFT FROM BUILDING",
+    "THEFT FROM COIN-OPPERATED MACHINES",
+    "THEFT OF MOTOR VEHICLE PARTS/ACCESSORIES",
+    "ALL OTHER LARCENY"
+  )
+
+  # "parking lot"" crimes
+  parking <- c(
+    "THEFT FROM MOTOR VEHICLE",
+    "THEFT OF MOTOR VEHICLE PARTS/ACCESSORIES",
+    "MOTOR VEHICLE THEFT"
+  )
+
+  property <-
+    c("Vehicle theft",
+      "Theft",
+      "Locked vehicle",
+      "Burglary",
+      "Criminal damage",
+      "Arson")
+
+  # create new datetime field
+  crime.geo$datetime <- paste(crime.geo$CDATE, crime.geo$CTIME)
+  crime.geo$datetime <- lubridate::parse_date_time(crime.geo$datetime,
+                                                   "%m%d%y %I%M %p")
+
+  # new year column
+  crime.geo$CDATE <- as.Date(crime.geo$CDATE, "%m/%d/%Y")
+  crime.geo$year <- format(crime.geo$CDATE, "%Y")
+
+  # transform to sp class and set CRS
+  NAD27 <-
+    sp::CRS(
+      "+proj=lcc +lat_1=42.73333333333333 +lat_2=44.06666666666667
+      +lat_0=42 +lon_0=-90 +x_0=609601.2192024384 +y_0=0 +datum=NAD27
+      +units=us-ft +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,
+      @ntv2_0.gsb,@ntv1_can.dat"
+    )
+
+  crimes <- crime.geo
+  crimes <- subset(crimes,!is.na(y))
+  coords <- cbind(as.numeric(crimes$x), as.numeric(crimes$y))
+  sp::coordinates(crimes) <- coords
+  sp::proj4string(crimes) <- NAD27
+  crimes$x <-
+    as.character(crimes$x) # this allows the writeOGR() to shapefile
+  crimes$y <- as.character(crimes$y)
+  crimes$score <- as.numeric(crimes$score)
+
+  ## remove unmatached and low scoring records
+  # crimes <- subset(crimes, score >= 95 | is.na(score)) # standard used in Gateway analysis
+
+  # confirm with plot
+  sp::plot(
+    crimes[sample(1:length(crimes), 1000),],
+    add = F,
+    col = "light blue",
+    main = paste0("SpatialPointsDataFrame in NAD27" , "\nN = ",
+                  dim(crimes@data)[1])
+  )
+
+  return(crimes)
+
 }

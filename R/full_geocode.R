@@ -1,8 +1,8 @@
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #
-# This document contains a draft function that geocode addresses in Milwaukee,
-# Wisconsin. Draft version geocodes crime data, first by matching against
-# geoprocessed MAI, thne using low_level funciton to access City geocode API.
+# This document contains a draft function that geocodes addresses in Milwaukee,
+# Wisconsin. This draft version geocodes crime data, first by matching against
+# geoprocessed MAI, then using a low-level function to access the City geocode API.
 #
 # Note: this is high volume; send to geocoder API only those sts not matched by
 # MAI.

@@ -11,9 +11,9 @@ A large SpatialPolygonsDataFrame.
 }
 \description{
 get_bids is a function that retreives the City of Milwaukee's Business
-Improvement District (BID) shapefile
-\href{http://city.milwaukee.gov/DownloadMapData3497.htm}{from the
-city's download map data page}.
+Improvement District (BID) kml file from the City's
+\href{http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query}
+{GIS Services REST API}.
 }
 \examples{
 \dontrun{
