@@ -4,6 +4,7 @@
 #  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #  o parcels dataset (acquired using get_parcels 04/15/2016)
 #  o raw_wibrs_2005thru2015 dataset (last updated 04/13/2016)
+#  o crimes.munged dataset (last updated 05/13/2016)
 #
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -21,6 +22,9 @@
 "mai_04042016"
 
 
+#--------------
+# WIBRS crime datasets
+#--------------
 
 #' raw_wibrs_2005thru2015 dataset
 #'
@@ -49,6 +53,24 @@
 #'
 #' @author Matthew Schumwinger
 "crime.geo"
+
+#' crimes.munged dataset
+#'
+#' This contains all WIBRS crime incident records for the entire City of
+#' Milwukee, from Jan 1, 2005 through Dec 31 2015. Records were downloaded from
+#' the COMPASS website. 2015 data were retreived on 04/13/2016. Data was then
+#' geocoded with full_geocode(). X/Y coordinates are in the NAD27 datum.
+#'
+#' The dataframe was then processed with munge_wibrs() and transformed into a
+#' SpatialPointsDataFrame ready for analysis and visualization. Raw
+#' WIBRS data is in raw_wibrs_2005thru2015 dataset.
+#'
+#' @examples
+#' data(crimes.munged)
+#' plot(crimes.munged)
+#'
+#' @author Matthew Schumwinger
+"crimes.munged"
 
 #--------------
 # Spatial Shapes
