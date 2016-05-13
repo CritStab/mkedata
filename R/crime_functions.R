@@ -128,44 +128,35 @@ get_wibrs <- function(url = wibrs_url, radius_ft = 99000, center = cityhall, dat
 #' crimes <- munge_wibrs(crime.geo)
 
 munge_wibrs <- function(df) {
-
   ## TODO: convert to spacetime class; add parameter to prune by geo score
 
   # new variable: map MPD RMS class to WIBRS OFFENSE1 type, per Nancy Olson email
-  crime.geo$group <- "other"
-  crime.geo$group[crime.geo$OFFENSE1 == "AGGRAVATED ASSAULT"
-                  | crime.geo$OFFENSE1 == "SIMPLE ASSAULT"
-                  | crime.geo$OFFENSE1 == "INTIMIDATION"] <- "Assault"
-  crime.geo$group[crime.geo$OFFENSE1 == "ARSON"] <- "Arson"
-  crime.geo$group[crime.geo$OFFENSE1 == "DESTRUCTION/DAMAGE/VANDALISM OF PROPERTY"] <-
+  df$group <- "other"
+  df$group[df$OFFENSE1 == "AGGRAVATED ASSAULT"
+           | df$OFFENSE1 == "SIMPLE ASSAULT"
+           | df$OFFENSE1 == "INTIMIDATION"] <- "Assault"
+  df$group[df$OFFENSE1 == "ARSON"] <- "Arson"
+  df$group[df$OFFENSE1 == "DESTRUCTION/DAMAGE/VANDALISM OF PROPERTY"] <-
     "Criminal damage"
-  crime.geo$group[crime.geo$OFFENSE1 == "BURGLARY/BREAKING AND ENTERING"] <-
-    "Burglary"
-  crime.geo$group[crime.geo$OFFENSE1 == "HOMICIDE"] <- "Homicide"
-  crime.geo$group[crime.geo$OFFENSE1 == "THEFT FROM MOTOR VEHICLE"] <-
-    "Locked vehicle"
-  crime.geo$group[crime.geo$OFFENSE1 == "ROBBERY"] <- "Robbery"
-  crime.geo$group[crime.geo$OFFENSE1 == "FORCIBLE RAPE"
-                  | crime.geo$OFFENSE1 == "FORCIBLE SODOMY"
-                  |
-                    crime.geo$OFFENSE1 == "SEXUAL ASSAULT WITH AN OBJECT"
-                  | crime.geo$OFFENSE1 == "FORCIBLE FONDLING"
-                  | crime.geo$OFFENSE1 == "INCEST"
-                  |
-                    crime.geo$OFFENSE1 == "STATUTORY RAPE"] <- "Sex offenses"
-  crime.geo$group[crime.geo$OFFENSE1 == "POCKET PICKING"
-                  | crime.geo$OFFENSE1 == "PURSE SNATCHING"
-                  | crime.geo$OFFENSE1 == "SHOPLIFTING"
-                  | crime.geo$OFFENSE1 == "THEFT FROM BUILDING"
-                  |
-                    crime.geo$OFFENSE1 == "THEFT FROM COIN-OPPERATED MACHINES"
-                  |
-                    crime.geo$OFFENSE1 == "THEFT OF MOTOR VEHICLE PARTS/ACCESSORIES"
-                  | crime.geo$OFFENSE1 == "ALL OTHER LARCENY"] <-
-    "Theft"
-  crime.geo$group[crime.geo$OFFENSE1 == "MOTOR VEHICLE THEFT"] <-
-    "Vehicle theft"
-  crime.geo$group <- as.factor(crime.geo$group)
+  df$group[df$OFFENSE1 == "BURGLARY/BREAKING AND ENTERING"] <- "Burglary"
+  df$group[df$OFFENSE1 == "HOMICIDE"] <- "Homicide"
+  df$group[df$OFFENSE1 == "THEFT FROM MOTOR VEHICLE"] <- "Locked vehicle"
+  df$group[df$OFFENSE1 == "ROBBERY"] <- "Robbery"
+  df$group[df$OFFENSE1 == "FORCIBLE RAPE"
+           | df$OFFENSE1 == "FORCIBLE SODOMY"
+           | df$OFFENSE1 == "SEXUAL ASSAULT WITH AN OBJECT"
+           | df$OFFENSE1 == "FORCIBLE FONDLING"
+           | df$OFFENSE1 == "INCEST"
+           | df$OFFENSE1 == "STATUTORY RAPE"] <- "Sex offenses"
+  df$group[df$OFFENSE1 == "POCKET PICKING"
+           | df$OFFENSE1 == "PURSE SNATCHING"
+           | df$OFFENSE1 == "SHOPLIFTING"
+           | df$OFFENSE1 == "THEFT FROM BUILDING"
+           | df$OFFENSE1 == "THEFT FROM COIN-OPPERATED MACHINES"
+           | df$OFFENSE1 == "THEFT OF MOTOR VEHICLE PARTS/ACCESSORIES"
+           | df$OFFENSE1 == "ALL OTHER LARCENY"] <- "Theft"
+  df$group[df$OFFENSE1 == "MOTOR VEHICLE THEFT"] <- "Vehicle theft"
+  df$group <- as.factor(df$group)
 
   # psuedo categories
   theft_types <- c(
@@ -194,13 +185,13 @@ munge_wibrs <- function(df) {
       "Arson")
 
   # create new datetime field
-  crime.geo$datetime <- paste(crime.geo$CDATE, crime.geo$CTIME)
-  crime.geo$datetime <- lubridate::parse_date_time(crime.geo$datetime,
-                                                   "%m%d%y %I%M %p")
+  df$datetime <- paste(df$CDATE, df$CTIME)
+  df$datetime <- lubridate::parse_date_time(df$datetime,
+                                            "%m%d%y %I%M %p")
 
   # new year column
-  crime.geo$CDATE <- as.Date(crime.geo$CDATE, "%m/%d/%Y")
-  crime.geo$year <- format(crime.geo$CDATE, "%Y")
+  df$CDATE <- as.Date(df$CDATE, "%m/%d/%Y")
+  df$year <- format(df$CDATE, "%Y")
 
   # transform to sp class and set CRS
   NAD27 <-
@@ -211,13 +202,12 @@ munge_wibrs <- function(df) {
       @ntv2_0.gsb,@ntv1_can.dat"
     )
 
-  crimes <- crime.geo
-  crimes <- subset(crimes,!is.na(y))
+  crimes <- df
+  crimes <- subset(crimes, !is.na(y))
   coords <- cbind(as.numeric(crimes$x), as.numeric(crimes$y))
   sp::coordinates(crimes) <- coords
   sp::proj4string(crimes) <- NAD27
-  crimes$x <-
-    as.character(crimes$x) # this allows the writeOGR() to shapefile
+  crimes$x <- as.character(crimes$x) # this allows the writeOGR() to shapefile
   crimes$y <- as.character(crimes$y)
   crimes$score <- as.numeric(crimes$score)
 
@@ -226,7 +216,7 @@ munge_wibrs <- function(df) {
 
   # confirm with plot
   sp::plot(
-    crimes[sample(1:length(crimes), 1000),],
+    crimes[sample(1:length(crimes), 1000), ],
     add = F,
     col = "light blue",
     main = paste0("SpatialPointsDataFrame in NAD27" , "\nN = ",
@@ -234,5 +224,4 @@ munge_wibrs <- function(df) {
   )
 
   return(crimes)
-
 }
