@@ -68,9 +68,7 @@ get_parcels <- function(url = parcel_url){
 #' get_bids
 #'
 #' get_bids is a function that retreives the City of Milwaukee's Business
-#' Improvement District (BID) kml file from the City's
-#' \href{http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query}
-#' {GIS Services REST API}.
+#' Improvement District (BID) kml file from the City's \href{http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query}{GIS Services REST API}.
 #'
 #' @importFrom rgdal readOGR
 #' @importFrom rvest html_session html_form submit_form
