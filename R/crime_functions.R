@@ -191,12 +191,12 @@ munge_wibrs <- function(df) {
 
   # new year column
   df$CDATE <- as.Date(df$CDATE, "%m/%d/%Y")
-  df$year <- format(df$CDATE, "%Y")
+  df$year <- as.factor(format(df$CDATE, "%Y"))
 
   # transform to sp class and set CRS
-  NAD27 <- sp::CRS("+proj=lcc +lat_1=42.73333333333333 +lat_2=44.06666666666667 +lat_0=42 +lon_0=-90
-             +x_0=609601.2192024384 +y_0=0 +datum=NAD27 +units=us-ft +no_defs +ellps=clrk66
-             +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat")
+  NAD27 <- sp::CRS("+proj=lcc +lat_1=42.73333333333333 +lat_2=44.06666666666667 +lat_0=42 +lon_0=-90 
+             +x_0=609601.2192024384 +y_0=0 +datum=NAD27 +units=us-ft +no_defs +ellps=clrk66 
+                   +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat")
 
   crimes <- df
   crimes <- subset(crimes, !is.na(y))
@@ -240,7 +240,7 @@ munge_wibrs <- function(df) {
 crimes_by_group_year <- function(spdf){
 
   # ## group by address, and sum by group  (all years)
-  # out <- data.table::data.table(crimes.munged@data)
+  # out <- data.table::data.table(spdf@data)
   # cols <- c("ADDRESS","x","y","group")
   #
   # s.all <- subset(out, select=cols)
