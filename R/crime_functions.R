@@ -194,8 +194,8 @@ munge_wibrs <- function(df) {
   df$year <- as.factor(format(df$CDATE, "%Y"))
 
   # transform to sp class and set CRS
-  NAD27 <- sp::CRS("+proj=lcc +lat_1=42.73333333333333 +lat_2=44.06666666666667 +lat_0=42 +lon_0=-90 
-             +x_0=609601.2192024384 +y_0=0 +datum=NAD27 +units=us-ft +no_defs +ellps=clrk66 
+  NAD27 <- sp::CRS("+proj=lcc +lat_1=42.73333333333333 +lat_2=44.06666666666667 +lat_0=42 +lon_0=-90
+             +x_0=609601.2192024384 +y_0=0 +datum=NAD27 +units=us-ft +no_defs +ellps=clrk66
                    +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat")
 
   crimes <- df
@@ -251,7 +251,6 @@ crimes_by_group_year <- function(spdf){
   # w.all$total <- apply(w.all[4:13], 1, sum)
 
   ## group by address and year, and sum by group
-  spdf <- crimes.munged
   projection <- spdf@proj4string
   out <- data.table::data.table(spdf@data)
   cols <- c("ADDRESS","x","y","group", "year")
