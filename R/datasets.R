@@ -139,3 +139,14 @@
 #'
 #' @author Matthew Schumwinger
 "mainroads"
+
+#' wi_zipcodes dataset
+#'
+#' This contains the 2010 ZIP Code shapes for Wisconsin, in NAD83.
+#'
+#' @examples
+#' data(wi_zipcodes)
+#' sp::plot(wi_zipcodes)
+#'
+#' @author Matthew Schumwinger
+"wi_zipcodes"
