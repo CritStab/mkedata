@@ -1,7 +1,7 @@
 Package: mkedata
 Type: Package
 Title: Repository for Processed Milwaukee Data
-Version: 0.1
+Version: 0.1.0
 Depends:
     R (>= 3.1.2)
 Date: 2016-12-08
@@ -14,6 +14,6 @@ Description: A simple package that provides a ready source for some popular
     processed and aggregated from their original versions to make them ready for 
     use. It also provides several functions for the retrieval and processing of 
     updated data from the City of Milwaukee.
-License: What license is it under?
+License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1
