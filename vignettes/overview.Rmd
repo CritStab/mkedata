@@ -25,7 +25,6 @@ library(mkedata)
 data("crimes.munged")
 h <- subset(crimes.munged, OFFENSE1 == "HOMICIDE")
 barplot(table(h$year))
-
 ```
 
 ## Mapping Milwaukee Data
@@ -36,16 +35,13 @@ and around the Avenues West Business Improvement District.
 ```{r, fig.show='hold', fig.cap = "Your figure caption."}
 library(sp)
 mkeoutline <- to_nad27(mkeoutline)
-
 h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
 plot(mkeoutline)
 plot(h2015, col = "salmon", add = T)
-# fix CRS conversion
 
 bids <- to_nad27(bids)
 plot(subset(bids, Name == "Avenues West"))
 plot(h2015, col = "salmon", add = T)
-
 ```
 
 
@@ -57,6 +53,5 @@ h.wgs84 <- to_wgs84(h2015)
 m <- data.frame(slot(h.wgs84, "coords"), slot(h.wgs84, "data"))
     names(m)[1:2] <- c("lon", "lat")
     qmplot(lon, lat, data = m, color = I("salmon"))
-
 ```
 
