@@ -35,28 +35,25 @@ and around the Avenues West Business Improvement District.
 
 ```{r, fig.show='hold', fig.cap = "Your figure caption."}
 library(sp)
-nad27 <- crimes.munged@proj4string
-wgs84 <- mkeoutline@proj4string
-mkeoutline@proj4string
-mkeoutline <- spTransform(mkeoutline, nad27)
+mkeoutline <- to_nad27(mkeoutline)
 
 h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
 plot(mkeoutline)
 plot(h2015, col = "salmon", add = T)
 # fix CRS conversion
 
-bids <- spTransform(bids, nad27)
+bids <- to_nad27(bids)
 plot(subset(bids, Name == "Avenues West"))
 plot(h2015, col = "salmon", add = T)
 
 ```
 
 
-Using **ggmap** and a transformation of the coordinates to the Web Mercator 
-projection, we can plot on a basemap for context:
+Using **ggmap** and a transformation of the coordinates to the web map standard 
+projection (WGS84), we can plot these crimes on a basemap for context:
 ```{r, message=FALSE, warning=TRUE}
 library(ggmap)
-h.wgs84 <- spTransform(h2015, wgs84) 
+h.wgs84 <- to_wgs84(h2015) 
 m <- data.frame(slot(h.wgs84, "coords"), slot(h.wgs84, "data"))
     names(m)[1:2] <- c("lon", "lat")
     qmplot(lon, lat, data = m, color = I("salmon"))
