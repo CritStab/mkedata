@@ -17,3 +17,6 @@ Description: A simple package that provides a ready source for some popular
 License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

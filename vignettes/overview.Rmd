@@ -1,0 +1,65 @@
+---
+title: "Overview"
+author: "Matthew Schuwminger"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+  output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+---
+
+**mkedata** takes care of much of the grunt work of acquiring and 
+processing Milwaukee data. This puts you much closer to doing what you most 
+care about: ***analyzing and visualizing Milwaukee data***.
+
+## Exploring Milwaukee Crime Data
+
+What's the citywide trend in homicides?
+```{r}
+library(mkedata)
+data("crimes.munged")
+h <- subset(crimes.munged, OFFENSE1 == "HOMICIDE")
+barplot(table(h$year))
+
+```
+
+## Mapping Milwaukee Data
+
+Let's look at where those homicides took place in 2015. First overall, then in 
+and around the Avenues West Business Improvement District.
+
+```{r, fig.show='hold', fig.cap = "Your figure caption."}
+library(sp)
+nad27 <- crimes.munged@proj4string
+wgs84 <- mkeoutline@proj4string
+mkeoutline@proj4string
+mkeoutline <- spTransform(mkeoutline, nad27)
+
+h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
+plot(mkeoutline)
+plot(h2015, col = "salmon", add = T)
+# fix CRS conversion
+
+bids <- spTransform(bids, nad27)
+plot(subset(bids, Name == "Avenues West"))
+plot(h2015, col = "salmon", add = T)
+
+```
+
+
+Using **ggmap** and a transformation of the coordinates to the Web Mercator 
+projection, we can plot on a basemap for context:
+```{r, message=FALSE, warning=TRUE}
+library(ggmap)
+h.wgs84 <- spTransform(h2015, wgs84) 
+m <- data.frame(slot(h.wgs84, "coords"), slot(h.wgs84, "data"))
+    names(m)[1:2] <- c("lon", "lat")
+    qmplot(lon, lat, data = m, color = I("salmon"))
+
+```
+
