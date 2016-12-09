@@ -52,7 +52,7 @@ Utility functions for data retrieval and processing:
 To install the development version from GitHub:
 
 ```{r, eval = FALSE}
-# install.packages("devtools")
+install.packages("devtools")
 install_github("MatthewSchumwinger/mkedata", build_vignettes = TRUE)
 ```
 
