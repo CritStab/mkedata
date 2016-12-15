@@ -4,7 +4,8 @@
 # Wisconsin.
 #
 # The primary functions include:
-#  o get_parcelbase
+#  o get_parcels
+#  o get_bids
 #  o get_mprop (TODO)
 #
 # Convenience functions:
@@ -39,7 +40,9 @@
 #' @examples
 #' \dontrun{
 #' parcels <- get_parcels()
-#' summary(parcels@data)
+#' head(parcels@data)
+#' plot(mkeoutline)
+#' plot(head(parcels, 500), col= "red", border = "red", add = T)
 #' }
 #'
 get_parcels <- function(url = parcel_url){
@@ -48,7 +51,7 @@ get_parcels <- function(url = parcel_url){
   message("Downloading . . . ")
 
   retrieved <- Sys.Date()
-  parcel_url <- "http://itmdapps.milwaukee.gov/gis/mapdata/parcelbase.zip" # as of Apr 15 2016
+  parcel_url <- "http://itmdapps.milwaukee.gov/gis/mapdata/parcelbase.zip" # as of Dec 15 2016
   mainDir <- getwd()
   subDir <- "temp_downloads"
   path <- paste(mainDir, subDir, sep = "/")

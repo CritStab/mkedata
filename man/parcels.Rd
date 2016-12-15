@@ -4,13 +4,14 @@
 \name{parcels}
 \alias{parcels}
 \title{parcels dataset}
-\format{An object of class \code{SpatialPolygonsDataFrame} with 160859 rows and 6 columns.}
+\format{An object of class \code{SpatialPolygonsDataFrame} with 160709 rows and 6 columns.}
 \usage{
 parcels
 }
 \description{
 This contains the parcelbase shapefile downloaded and processed to a
-SpatialPolygonsDataFrame on April 15, 2016.
+SpatialPolygonsDataFrame on December 15, 2016. Projected using State Plane
+South NAD 27 (ESPG 32054).
 }
 \examples{
 data(parcels)

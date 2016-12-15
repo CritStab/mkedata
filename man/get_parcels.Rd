@@ -27,7 +27,9 @@ taxkey-based dataset), and condominium data will be accurately joined.
 \examples{
 \dontrun{
 parcels <- get_parcels()
-summary(parcels@data)
+head(parcels@data)
+plot(mkeoutline)
+plot(head(parcels, 500), col= "red", border = "red", add = T)
 }
 
 }
