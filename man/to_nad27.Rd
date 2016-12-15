@@ -15,10 +15,10 @@ object to the State Plane South NAD 27 (ESPG 32054) datum.
 }
 \examples{
 \dontrun{
-mkeoutline <- to_nad27(mkeoutline)
-h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
-plot(mkeoutline)
-plot(h2015, col = "salmon", add = T)
+# plot ZIP codes in and around Milwuakee
+wi_zipcodes <- to_nad27(wi_zipcodes)
+plot(mkeoutline, border = "red", lwd = 5)
+plot(wi_zipcodes, add = T)
 }
 
 }
