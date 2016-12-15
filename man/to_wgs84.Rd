@@ -15,9 +15,11 @@ object to the WGS 1984 (EPSG:4326) coordinate system.
 }
 \examples{
 \dontrun{
-hoods <- to_wgs84(hoods)
-plot(hoods)
-plot(bids, col = "salmon", add = T)
+# plot 2015 homicides on web contextual layer
+h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
+h2015 <- to_wgs84(h2015) # projection used for webmaps
+m <- data.frame(slot(h2015, "coords"), slot(h2015, "data"))
+names(m)[1:2] <- c("lon", "lat")
 }
 
 }

@@ -18,7 +18,7 @@ the State Plane South NAD 27 (ESPG 32054) datum.
 \dontrun{
 bids <- get_bids()
 summary(bids@data)
-plot(hoods)
+plot(mkeoutline)
 plot(test, col = "red",add = T)
 }
 

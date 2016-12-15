@@ -32,14 +32,14 @@ barplot(table(h$year))
 Let's look at where those homicides took place in 2015. First overall, then in 
 and around the Avenues West Business Improvement District.
 
-```{r, fig.show='hold', fig.cap = "Your figure caption."}
+```{r, fig.show='hold'}
 library(sp)
-mkeoutline <- to_nad27(mkeoutline)
+# mkeoutline <- to_nad27(mkeoutline)
 h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
 plot(mkeoutline)
 plot(h2015, col = "salmon", add = T)
 
-bids <- to_nad27(bids)
+# bids <- to_nad27(bids)
 plot(subset(bids, Name == "Avenues West"))
 plot(h2015, col = "salmon", add = T)
 ```

@@ -27,7 +27,7 @@ taxkey-based dataset), and condominium data will be accurately joined.
 \examples{
 \dontrun{
 parcels <- get_parcels()
-head(parcels@data)
+summary(parcels@data)
 }
 
 }

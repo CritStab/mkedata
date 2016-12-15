@@ -39,7 +39,7 @@
 #' @examples
 #' \dontrun{
 #' parcels <- get_parcels()
-#' head(parcels@data)
+#' summary(parcels@data)
 #' }
 #'
 get_parcels <- function(url = parcel_url){
@@ -84,7 +84,7 @@ get_parcels <- function(url = parcel_url){
 #' \dontrun{
 #' bids <- get_bids()
 #' summary(bids@data)
-#' plot(hoods)
+#' plot(mkeoutline)
 #' plot(test, col = "red",add = T)
 #' }
 #'
@@ -155,9 +155,11 @@ to_nad27 <- function(x){
 #' @export
 #' @examples
 #' \dontrun{
-#' hoods <- to_wgs84(hoods)
-#' plot(hoods)
-#' plot(bids, col = "salmon", add = T)
+#' # plot 2015 homicides on web contextual layer
+#' h2015 <- subset(crimes.munged, OFFENSE1 == "HOMICIDE" & year == "2015")
+#' h2015 <- to_wgs84(h2015) # projection used for webmaps
+#' m <- data.frame(slot(h2015, "coords"), slot(h2015, "data"))
+#' names(m)[1:2] <- c("lon", "lat")
 #' }
 #'
 to_wgs84 <- function(x){
