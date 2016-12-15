@@ -4,7 +4,7 @@
 \name{bids}
 \alias{bids}
 \title{bids dataset}
-\format{An object of class \code{SpatialPolygonsDataFrame} with 35 rows and 2 columns.}
+\format{An object of class \code{SpatialPolygonsDataFrame} with 33 rows and 2 columns.}
 \usage{
 bids
 }

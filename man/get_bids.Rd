@@ -11,13 +11,15 @@ A large SpatialPolygonsDataFrame.
 }
 \description{
 get_bids is a function that retreives the City of Milwaukee's Business
-Improvement District (BID) kml file from the City's \href{http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query}{GIS Services REST API}.
+Improvement District (BID) kml file from the City's \href{http://maps2.milwaukee.gov/ArcGIS/rest/services/planning/special_districts/MapServer/3/query}{GIS Services REST API}. Projection is transformed to
+the State Plane South NAD 27 (ESPG 32054) datum.
 }
 \examples{
 \dontrun{
 bids <- get_bids()
-sp::plot(bids)
-head(bids@data)
+summary(bids@data)
+plot(hoods)
+plot(test, col = "red",add = T)
 }
 
 }

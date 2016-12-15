@@ -13,8 +13,9 @@
 #
 # Business Improvement District (BID) and neighborhood
 # boundaries were acquired from the City of Milwaukee [GIS Services REST API]
-# (http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer).
+# (http://maps2.milwaukee.gov/ArcGIS/rest/services/planning/special_districts/MapServer).
 # http://city.milwaukee.gov/ImageLibrary/Public/GIS/MapMilwaukee_GISServices.pdf
+# http://city.milwaukee.gov/ImageLibrary/Public/GIS/MMNewsletters/MapMilwaukee201610_MAPS2.pdf
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -71,7 +72,8 @@ get_parcels <- function(url = parcel_url){
 #' get_bids
 #'
 #' get_bids is a function that retreives the City of Milwaukee's Business
-#' Improvement District (BID) kml file from the City's \href{http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query}{GIS Services REST API}.
+#' Improvement District (BID) kml file from the City's \href{http://maps2.milwaukee.gov/ArcGIS/rest/services/planning/special_districts/MapServer/3/query}{GIS Services REST API}. Projection is transformed to
+#' the State Plane South NAD 27 (ESPG 32054) datum.
 #'
 #' @importFrom rgdal readOGR
 #' @importFrom rvest html_session html_form submit_form
@@ -81,37 +83,42 @@ get_parcels <- function(url = parcel_url){
 #' @examples
 #' \dontrun{
 #' bids <- get_bids()
-#' sp::plot(bids)
-#' head(bids@data)
+#' summary(bids@data)
+#' plot(hoods)
+#' plot(test, col = "red",add = T)
 #' }
 #'
 get_bids <- function(){
 
   # create session; populate login form
-  start <- "http://maps.milwaukee.gov/ArcGIS/rest/services/planning/Special_Districts/MapServer/3/query"
+  start <- "http://maps2.milwaukee.gov/ArcGIS/rest/services/planning/special_districts/MapServer/3/query"
   pgsession <- rvest::html_session(start)
   pgform    <- rvest::html_form(pgsession)
 
   names(pgform) <- "foo" # form must be named to compute on it
-  # names(pgform$foo$fields)[10] <- "GET"
-  # pgform$foo$fields$GET$name <- "GET"
   pgform$foo$fields$text$value <- "%"   # this is the SQL wildcard, which retreives all BIDS
-  pgform$foo$fields$returnCountOnly$value <- "false" # necesseary for KMD submission
-  pgform$foo$fields$returnIdsOnly$value <- "false"   # necesseary for KMD submission
+  pgform$foo$fields$returnCountOnly$value <- "false" # necesseary for KMZ submission
+  pgform$foo$fields$returnIdsOnly$value <- "false"   # necesseary for KMZ submission
+  pgform$foo$fields$returnDistinctValues$value <- "false"   # necesseary for KMZ submission
   pgform$foo$fields$f$value <- "kmz"
 
   # returns the zipped (binary) KMZ file
   mykmz <- rvest::submit_form(pgsession, pgform$foo)
 
   # convert to spatial object
-  zz <- file("testbin.zip", "wb")
-  writeBin(t$response$content, zz)
+  zz <- file("mykmz.kmz", "wb")
+  writeBin(mykmz$response$content, zz)
   close(zz)
-  tt <- unzip("mykmz.zip")
+  tt <- unzip("mykmz.kmz")
   spdf <- rgdal::readOGR("doc.kml", "Business Improvement Districts (BID)")
   unlink("mykmz.zip")
   unlink("doc.kml")
-  spdf
+  spdf <- to_nad27(spdf) # change projection to NAD27
+
+  # plot as side effect for verification purposes
+  plot(spdf)
+
+  return(spdf)
 }
 
 #' to_nad27
