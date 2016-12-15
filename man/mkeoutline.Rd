@@ -11,7 +11,7 @@ mkeoutline
 \description{
 This contains the corporate boundary of the City of Milwaukee shapefile
 downloaded on Feb 26, 2015 and processed to a SpatialPolygonsDataFrame.
-Projected using WGS84.
+Projection transformed to State Plane South NAD 27 (ESPG 32054).
 }
 \examples{
 data(mkeoutline)

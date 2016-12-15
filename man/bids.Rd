@@ -10,8 +10,8 @@ bids
 }
 \description{
 This contains the Milwaukee Business Improvement Distict (BID) shapefile
-downloaded on Feb 26, 2015 and processed to a SpatialPolygonsDataFrame.
-Projected using WGS84.
+downloaded on December 15, 2016 and processed to a SpatialPolygonsDataFrame.
+Projection transformed to State Plane South NAD 27 (ESPG 32054).
 }
 \examples{
 data(bids)
