@@ -169,3 +169,38 @@ to_wgs84 <- function(x){
   crs <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
   spTransform(x, crs)
 }
+
+#' get_mprop
+#'
+#' get_mprop is a funtion that retreives the City of Milwaukee
+#' \href{http://itmdapps.milwaukee.gov/gis/mprop/Documentation/mprop.pdf}{Master
+#' Property Database (MPROP)}. This retrieves the MS Excel verion, which is approximately
+#' 59MB, and may take awhile to download. Once download is complete, the file
+#' is transformed to a data frame.
+#'
+#' @importFrom readxl read_excel
+#'
+#' @param url Endpoint URL. Default = \url{http://itmdapps.milwaukee.gov/xmldata/Get_mprop_xsl}
+#' @return A data frame.
+#' @export
+#' @examples
+#' dat <- get_mprop()
+#' str(dat)
+#' hist(as.numeric(dat$BEDROOMS), breaks = 200)
+#'
+get_mprop <- function(url = url){
+  retrieved <- Sys.Date()
+  url <- "http://itmdapps.milwaukee.gov/xmldata/Get_mprop_xsl" # as of Dec 15 2016
+  message("This retrieves the Excel version, which is approximately 59MB and may
+          take awhile to download.")
+  readline(prompt="Press [enter] to continue")
+  message("Downloading . . . ")
+
+  temp <- tempfile()
+  download.file(url, "test.xlsx")
+  data <- readxl::read_excel("~/Documents/GitHub_projects/mkedata/test.xlsx")
+  unlink(temp)
+
+  message("Transforming to data frame . . . ")
+  data
+}

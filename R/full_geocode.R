@@ -4,7 +4,7 @@
 # Wisconsin. This draft version geocodes crime data, first by matching against
 # geoprocessed MAI, then using a low-level function to access the City geocode API.
 #
-# Note: this is high volume; send to geocoder API only those sts not matched by
+# Note: this is high volume; send to geocoder API only those sets not matched by
 # MAI.
 # Note: any MAI score less than 95 could be suspect, especially on street
 # direction error, DIME over 90 look good
@@ -13,7 +13,7 @@
 # TODO:
 #  o generalize to any type of records; use field param
 #  o include instuctions on preparing `field` param to geocode on
-#  o improve exampe, use more wieldy data, plot
+#  o improve example, use more wieldy data, plot
 #  o consider using  http://www.mapquestapi.com/geocoding/
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
