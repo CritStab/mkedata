@@ -196,9 +196,13 @@ get_mprop <- function(url = url){
   readline(prompt="Press [enter] to continue")
   message("Downloading . . . ")
 
-  temp <- tempfile()
-  download.file(url, "test.xlsx")
-  data <- readxl::read_excel("~/Documents/GitHub_projects/mkedata/test.xlsx")
+  # download.file(url, "test.xlsx")
+  # data <- readxl::read_excel("test.xlsx")
+  # unlink(test.xlsx)
+
+  temp <- tempfile(fileext = ".xlsx")
+  download.file(url, temp)
+  data <- readxl::read_excel(temp)
   unlink(temp)
 
   message("Transforming to data frame . . . ")
