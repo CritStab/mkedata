@@ -5,7 +5,7 @@ mkedata
 
 Are you an R user with a professional or recreational interest in Milwaukee public data?
 
-**mkedata** takes care of much of the grunt work of acquiring and processing Milwaukee data. This puts you that much closer to doing what you most care about: ***analyzing and visualizing Milwaukee data***.
+**mkedata** takes care of much of the grunt work of acquiring and processing Milwaukee data. This puts you much closer to doing what you most care about: ***analyzing and visualizing Milwaukee data***.
 
 Overview
 --------
@@ -16,7 +16,7 @@ This package currently focuses on crime, property, and spatial data relating to 
 
 Datasets relevent to the City of Milwaukee, Wisconsin:
 - Master Address Index (mai\_04042016 dataset -- acquired using get\_mai 04/04/2016)
-- Parcelbase registry of individual city parcels (parcels dataset -- acquired using get\_parcels 04/15/2016)
+- Master Property (MPROP) database mprop\_12192016 dataset -- acquired using get\_mprop 012/19/2016) - Parcelbase registry of individual city parcels (parcels dataset -- acquired using get\_parcels 12/15/2016)
 - Raw crime indicents data (raw\_wibrs\_2005thru2015 dataset -- last updated 04/13/2016)
 - Processed and geocoded crime incidents (crimes.munged dataset -- last updated 05/13/2016)
 
@@ -25,8 +25,7 @@ Utility functions for data retrieval and processing:
 - append\_wibrs
 - munge\_wibrs
 - get\_parcelbase
-- get\_mprop (TODO)
-- full\_geocode
+- get\_mprop - full\_geocode
 - MAIgeocoder
 
 Installation
@@ -35,7 +34,7 @@ Installation
 To install the development version from GitHub:
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
 install_github("MatthewSchumwinger/mkedata", build_vignettes = TRUE)
 ```
 
