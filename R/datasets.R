@@ -28,6 +28,20 @@
 "mai_04042016"
 
 
+#' mprop_12192016 dataset
+#'
+#' This contains the City of Milwaukee \href{http://itmdapps.milwaukee.gov/gis/mprop/Documentation/mprop.pdf}
+#' {MasterProperty Database (MPROP)}. The file was downloaded and processed to a
+#' data frame on December 19, 2016.
+#'
+#' @examples
+#' data(mprop_12192016)
+#' head(mprop_12192016)
+#'
+#' @author Matthew Schumwinger
+"mprop_12192016"
+
+
 #--------------
 # WIBRS crime datasets
 #--------------
