@@ -16,7 +16,7 @@ This package currently focuses on crime, property, and spatial data relating to 
 
 Datasets relevent to the City of Milwaukee, Wisconsin:
 - Master Address Index (mai\_04042016 dataset -- acquired using get\_mai 04/04/2016)
-- Master Property (MPROP) database mprop\_12192016 dataset -- acquired using get\_mprop 012/19/2016) - Parcelbase registry of individual city parcels (parcels dataset -- acquired using get\_parcels 12/15/2016)
+- Master Property (MPROP) database mprop\_12192016 dataset -- acquired using get\_mprop 012/19/2016) - Parcelbase registry of individual city parcels (parcels dataset -- acquired using get\_parcels 12/19/2016)
 - Raw crime indicents data (raw\_wibrs\_2005thru2015 dataset -- last updated 04/13/2016)
 - Processed and geocoded crime incidents (crimes.munged dataset -- last updated 05/13/2016)
 

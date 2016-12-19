@@ -4,8 +4,9 @@
 #  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #  o raw_wibrs_2005thru2015 dataset (last updated 04/13/2016)
 #  o crimes.munged dataset (last updated 05/13/2016)
+#  o mprop_12192016 dataset (acquired using get_mprop 012/19/2016)
 # Spatial shapes:
-#  o parcels dataset (acquired using get_parcels 12/15/2016)
+#  o parcels dataset (acquired using get_parcels 12/19/2016)
 #  o bids dataset (acquired using get_bids 12/15/2016)
 #  o hoods dataset (last updated Feb 26, 2015)
 #  o mkeoutline dataset (last updated Feb 26, 2015)
@@ -97,7 +98,7 @@
 #' parcels dataset
 #'
 #' This contains the parcelbase shapefile downloaded and processed to a
-#' SpatialPolygonsDataFrame on December 15, 2016. Projected using State Plane
+#' SpatialPolygonsDataFrame on December 19, 2016. Projected using State Plane
 #' South NAD 27 (ESPG 32054).
 #'
 #' @examples

@@ -46,7 +46,7 @@
 #' }
 #'
 get_parcels <- function(url = parcel_url){
-  message("This retrieves the parcelbase shapefile, which is approximately 16MB and may
+  message("This retrieves the parcelbase shapefile, which is approximately 15MB and may
           take awhile to download.")
   message("Downloading . . . ")
 
@@ -63,7 +63,7 @@ get_parcels <- function(url = parcel_url){
 
   message("Download complete . . . ")
   message("Transforming shapefile to SpatialPolygonsDataFrame. . . .")
-  spdf <- rgdal::readOGR(path, "parcelbase")
+  spdf <- rgdal::readOGR(path, "parcelbase", stringsAsFactors = FALSE)
   unlink(temp)
   unlink(path, recursive = T)
   message("Removing `/temp_downloads` directory . . .")
