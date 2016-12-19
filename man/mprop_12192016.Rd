@@ -9,9 +9,7 @@
 mprop_12192016
 }
 \description{
-This contains the City of Milwaukee \href{http://itmdapps.milwaukee.gov/gis/mprop/Documentation/mprop.pdf}
-{MasterProperty Database (MPROP)}. The file was downloaded and processed to a
-data frame on December 19, 2016.
+This contains the City of Milwaukee \href{http://itmdapps.milwaukee.gov/gis/mprop/Documentation/mprop.pdf}{MasterProperty Database (MPROP)}. The file was downloaded and processed to a data frame on December 19, 2016.
 }
 \examples{
 data(mprop_12192016)
