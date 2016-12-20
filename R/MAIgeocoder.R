@@ -52,8 +52,9 @@ get_mai <- function(url = mai_url){
 #' geoprocess_mai geoprocesses the City of Milwaukee
 #' \href{http://itmdapps.milwaukee.gov/gis/mai/Documentation/mai.pdf}{Master
 #' Address Index (MAI)}. It does this by joining the MAI to the parcelbase file
-#' by TAXKEY field to associate lat/lon values with each MAI record. It also
-#' adds a new "ADDRESS" field which is a concatination of existing fields.
+#' by TAXKEY field to associate lat/lon values (in NAD 27) with each MAI record.
+#' It also adds a new "ADDRESS" field, which is a concatination of existing
+#' fields.
 #'
 #' @importFrom sp CRS spTransform coordinates
 #'
