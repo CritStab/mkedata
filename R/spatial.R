@@ -196,10 +196,6 @@ get_mprop <- function(url = url){
   readline(prompt="Press [enter] to continue")
   message("Downloading . . . ")
 
-  # download.file(url, "test.xlsx")
-  # data <- readxl::read_excel("test.xlsx")
-  # unlink(test.xlsx)
-
   temp <- tempfile(fileext = ".xlsx")
   download.file(url, temp)
   data <- readxl::read_excel(temp)

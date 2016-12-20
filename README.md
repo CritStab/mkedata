@@ -35,7 +35,7 @@ To install the development version from GitHub:
 
 ``` r
 install.packages("devtools")
-install_github("MatthewSchumwinger/mkedata", build_vignettes = TRUE)
+devtools::install_github("MatthewSchumwinger/mkedata", build_vignettes = TRUE)
 ```
 
 To see examples of these features in use, please view the '**overview**' vignette.

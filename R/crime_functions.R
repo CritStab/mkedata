@@ -70,7 +70,7 @@ append_wibrs <- function(old, new){
 #' city2015 <- get_wibrs()
 #' head(city2015)
 #' }
-get_wibrs <- function(url = wibrs_url, radius_ft = 99000, center = cityhall, data_range = yr2015) {
+get_wibrs <- function(url = wibrs_url, radius_ft = 99000, center = cityhall, date_range = yr2015) {
   itmdapps <- "http://itmdapps.milwaukee.gov/publicApplication_QD/queryDownload/login.faces"
   radius <- "http://itmdapps.milwaukee.gov/publicApplication_QD/queryDownload/radiusfm.faces"
   cityhall <- "200 E Wells ST"
