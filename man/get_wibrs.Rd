@@ -5,7 +5,7 @@
 \title{get_wibrs}
 \usage{
 get_wibrs(url = wibrs_url, radius_ft = 99000, center = cityhall,
-  data_range = yr2015)
+  date_range = yr2015)
 }
 \arguments{
 \item{url}{Target url.}

@@ -15,9 +15,12 @@ This contains the City of Milwaukee \href{http://itmdapps.milwaukee.gov/gis/mpro
 head(mprop_12192016)
 # join to parcels spdf
 combo <- merge(parcels, mprop_12192016, by = TAXKEY, all.x = T)
+# how much vacant land in Milwaukee?
+v <- subset(combo, LAND_USE_GP == "13")
+sum(as.numeric(v$LOT_AREA), na.rm = T) / sum(as.numeric(combo$LOT_AREA), na.rm = T)
 # plot vacant land
 plot(mkeoutline)
-plot(subset(combo, LAND_USE_GP == "13"), add = T, border = "brown")
+plot(subset(v, add = T, border = "brown")
 
 }
 \author{

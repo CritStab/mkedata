@@ -9,13 +9,6 @@
 #  o match_mai
 #  o mai_04042016 dataset (acquired using get_mai 04/04/2016)
 #
-# require("RCurl")
-# require("jsonlite")
-# require("stringr")
-# require("XML")
-# raw <- read.xlsx2("~/Dropbox/Analytics-Consulting/Non-client_projects/MKE data/crime/2014_WIBR_Radius99K_accessed091015.xls", 1) # accessed 9/10/15, 130 additinal records
-# devtools::use_data(raw)
-# data("raw") # 2014 raw data
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #' get_mai
@@ -27,7 +20,7 @@
 #' is transformed to a data frame (this may take a while).
 #'
 #' @import jsonlite
-#' @importFrom XML xmlParse
+#' @importFrom XML xmlParse xmlToDataFrame
 #'
 #' @param url Endpoint URL. Default = \url{http://itmdapps.milwaukee.gov/xmldata/Get_mai_xml}
 #' @return A data frame.
@@ -49,7 +42,7 @@ get_mai <- function(url = mai_url){
   message("Download complete . . . ")
   message("Transforming XML to data frame . . . this could take several hours.")
   # readline(prompt="Press [enter] to continue")
-  root_df <- xmlToDataFrame(root, homogeneous = TRUE, stringsAsFactors = TRUE) # confirm new params work
+  root_df <- XML::xmlToDataFrame(root, homogeneous = TRUE, stringsAsFactors = TRUE) # confirm new params work
   root_df
   }
 
@@ -132,15 +125,15 @@ geocode_api <- function(batch, fields){
     result$candidates <- psuedo
 
     add <- paste(batch[i, fields], collapse="+")
-    add <- str_replace_all(add, "[[:punct:]]", " ") # remove punctuation, except " "
-    add <- str_replace_all(add, "[ ]+", "+") # to make sure all spaces are single "+"
+    add <- stringr::str_replace_all(add, "[[:punct:]]", " ") # remove punctuation, except " "
+    add <- stringr::str_replace_all(add, "[ ]+", "+") # to make sure all spaces are single "+"
     url <- paste(prefix, add, suffix, sep="")
 
     print(paste("calling url for record", i, ". URL snip: [", add, "]"))
-    html <- getURL(url)           # !need to handle the null address field case
+    html <- RCurl::getURL(url)           # !need to handle the null address field case
 
     print(paste("parsing html..."))
-    try(result <- fromJSON(html))   # consider using tryCatch to capture particular error message
+    try(result <- jsonlite::fromJSON(html))   # consider using tryCatch to capture particular error message
 
     if(is.null(result$candidates)){
       message("geocoder error: no candidates returned")
