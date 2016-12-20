@@ -12,8 +12,12 @@ mprop_12192016
 This contains the City of Milwaukee \href{http://itmdapps.milwaukee.gov/gis/mprop/Documentation/mprop.pdf}{MasterProperty Database (MPROP)}. The file was downloaded and processed to a data frame on December 19, 2016.
 }
 \examples{
-data(mprop_12192016)
 head(mprop_12192016)
+# join to parcels spdf
+combo <- merge(parcels, mprop_12192016, by = TAXKEY, all.x = T)
+# plot vacant land
+plot(mkeoutline)
+plot(subset(combo, LAND_USE_GP == "13"), add = T, border = "brown")
 
 }
 \author{
